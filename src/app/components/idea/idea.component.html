@@ -1,0 +1,22 @@
+<div class="business-idea-container p-shadow-6">
+  <!-- User Profile Section -->
+  <div class="profile-section p-d-flex p-ai-center p-jc-center">
+    <img [src]="profileImage" alt="Profile Image" class="profile-image" />
+    <div class="profile-info">
+      <h2 class="username">{{ username }}</h2>
+      <p class="followers">{{ followers | number }} Followers</p>
+    </div>
+  </div>
+
+  <!-- Business Idea Section -->
+  <div class="idea-section">
+    <h1 class="idea-title">{{ businessIdea.catchyName }}</h1>
+    <p class="idea-description">{{ businessIdea.whatItIs }}</p>
+    <p class="idea-tagline">{{ businessIdea.tagline }}</p>
+  </div>
+
+  <!-- Tweetable Hook and Share Button -->
+  <div class="hook-section">
+    <p class="tweetable-hook">"{{ businessIdea.tweetableHook }}"</p>
+  </div>
+</div>
