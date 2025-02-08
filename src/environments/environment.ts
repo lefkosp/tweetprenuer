@@ -1,5 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
-  // Add other environment-specific configuration here
+  apiBaseUrl: 'http://localhost:3000',
 };

@@ -8,12 +8,15 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly API_TIMEOUT = 30000; // 30 seconds
+  private BASE_URL = environment.apiBaseUrl; // Cloudflare-injected env variable
 
   constructor(private http: HttpClient) {}
 
   public verifyUsername(username: string): Observable<ApiResponse> {
     return this.http
-      .post<ApiResponse>(`${environment.apiUrl}/verify-username`, { username })
+      .post<ApiResponse>(`${this.BASE_URL}/verify-username`, {
+        username,
+      })
       .pipe(timeout(this.API_TIMEOUT), retry(2), catchError(this.handleError));
   }
 
