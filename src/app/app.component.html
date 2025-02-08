@@ -1,34 +1,59 @@
 <div class="test-container">
   <div class="main-container">
     @if (isSubmitting){
-    <p-progress-spinner ariaLabel="loading" />
+    <app-loader />
     } @else { @if (!parsedResponse) {
     <div class="x-form-container" [formGroup]="xForm">
       <div class="header">
-        <h1>Welcome!</h1>
-        <span>enter your 𝕏 username for a personalized business idea</span>
+        <!-- <div class="logo">
+          <mat-icon class="x-icon">trending_up</mat-icon>
+        </div> -->
+        <h1>who are you?</h1>
+        <p class="subtitle">
+          drop your 𝕏 handle & I'll cook up a business card just for you
+        </p>
       </div>
 
       <div class="content">
-        <p-inputgroup class="input-group">
-          <p-inputgroup-addon>&#64;</p-inputgroup-addon>
-          <input
-            id="username"
-            pInputText
-            type="text"
-            placeholder="username"
-            formControlName="xUsername"
-          />
-        </p-inputgroup>
+        <div class="input-wrapper">
+          <mat-form-field class="input-group" appearance="fill">
+            <mat-label>Username</mat-label>
+            <span matPrefix class="prefix">&#64;</span>
+            <input
+              matInput
+              id="username"
+              type="text"
+              formControlName="xUsername"
+              placeholder="elonmusk"
+            />
+            <mat-hint
+              >Enter your X (Twitter) username without the &#64;
+              symbol</mat-hint
+            >
+          </mat-form-field>
+        </div>
       </div>
 
       <div class="actions">
-        <p-button
-          (onClick)="submitUsername()"
-          label="Submit"
-          icon="pi pi-check"
-          iconPos="left"
-        />
+        <button mat-raised-button color="primary" (click)="submitUsername()">
+          <mat-icon>outdoor_grill</mat-icon>
+          Cook
+        </button>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <mat-icon>psychology</mat-icon>
+          <span>AI-Powered</span>
+        </div>
+        <div class="feature">
+          <mat-icon>person_outline</mat-icon>
+          <span>Personalized</span>
+        </div>
+        <div class="feature">
+          <mat-icon>bolt</mat-icon>
+          <span>Instant</span>
+        </div>
       </div>
     </div>
     } @else {
@@ -41,7 +66,19 @@
     ></app-idea>
     } }
   </div>
+  @if (parsedResponse) {
+  <button
+    mat-raised-button
+    color="accent"
+    class="download-btn"
+    (click)="downloadScreenshot()"
+  >
+    <mat-icon>download</mat-icon>
+    Get your business card
+  </button>
+  }
 </div>
+
 <!-- 
  @if (isSubmitting){
     <p-progress-spinner ariaLabel="loading" />

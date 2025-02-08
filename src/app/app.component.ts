@@ -1,18 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { StepperModule } from 'primeng/stepper';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './services/api.service';
 import { IdeaService } from './services/idea.service';
 import { BusinessIdea, ParsedResponse } from './models/idea.model';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { IdeaComponent } from './components/idea/idea.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+
+import html2canvas from 'html2canvas';
+import { LoaderComponent } from './components/loader/loader.component';
 
 type valuationOptions = 'x' | 'questions';
 
@@ -23,15 +24,14 @@ type valuationOptions = 'x' | 'questions';
   standalone: true,
   imports: [
     CommonModule,
-    ButtonModule,
-    InputTextModule,
-    StepperModule,
     ReactiveFormsModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-    InputNumberModule,
-    ProgressSpinnerModule,
+    MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatIconModule,
     IdeaComponent,
+    LoaderComponent,
   ],
 })
 export class AppComponent {
@@ -71,21 +71,27 @@ export class AppComponent {
     }),
   });
 
-  public xForm = this.formBuilder.group({
-    xUsername: this.formBuilder.control(''),
-  });
+  public xForm: FormGroup;
 
   businessIdea: BusinessIdea | null = null;
   public route: string = 'x';
 
+  constructor(private fb: FormBuilder) {
+    this.xForm = this.fb.group({
+      xUsername: [''],
+    });
+  }
+
   public submitUsername() {
-    const username = this.xForm.controls.xUsername.value as string;
+    const username = this.xForm.controls['xUsername'].value as string;
 
     this.isSubmitting = true;
     this.apiService.verifyUsername(username).subscribe({
       next: (res) => {
         this.isSubmitting = false;
+        console.log(res);
         this.parsedResponse = this.ideaService.parseApiResponse(res);
+        console.log(this.parsedResponse);
       },
       error: (err) => {
         console.error(err);
@@ -129,5 +135,24 @@ export class AppComponent {
 
   get objectKeys() {
     return Object.keys;
+  }
+
+  async downloadScreenshot() {
+    const ideaElement = document.querySelector('.business-idea-container');
+    if (ideaElement) {
+      const canvas = await html2canvas(ideaElement as HTMLElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#242424',
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = `business-idea-${
+        this.parsedResponse?.username || 'screenshot'
+      }.png`;
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.click();
+    }
   }
 }

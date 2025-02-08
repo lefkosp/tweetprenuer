@@ -1,0 +1,80 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 100%;
+  padding: 0.25rem;
+}
+
+.loading-message {
+  margin-top: 2rem;
+  font-size: 1em;
+  font-weight: 500;
+  color: #9e9e9e;
+  position: relative;
+  animation: glitch 1s linear infinite alternate;
+}
+
+/* RGB Ghost Layers */
+.loading-message::before,
+.loading-message::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  opacity: 0.75;
+}
+
+.loading-message::before {
+  color: red;
+  transform: translate(-1px, 0);
+  animation: glitch-rgb 1s infinite ease-in-out alternate;
+}
+
+.loading-message::after {
+  color: cyan;
+  transform: translate(1px, 0);
+  animation: glitch-rgb 1s infinite ease-in-out alternate-reverse;
+}
+
+@keyframes glitch {
+  0% {
+    transform: skewX(0deg) translateY(0);
+  }
+  20% {
+    transform: skewX(8deg) translateY(-1px);
+    opacity: 0.85;
+  }
+  40% {
+    transform: skewX(-8deg) translateY(1px);
+    opacity: 1;
+  }
+  60% {
+    transform: skewX(4deg) translateY(0);
+    opacity: 0.9;
+  }
+  80% {
+    transform: skewX(-4deg) translateY(-1px);
+    opacity: 1;
+  }
+  100% {
+    transform: skewX(0deg) translateY(0);
+  }
+}
+
+@keyframes glitch-rgb {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate(-1.5px, 1.5px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(1.5px, -1.5px);
+    opacity: 0.75;
+  }
+}

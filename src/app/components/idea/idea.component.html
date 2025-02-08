@@ -1,22 +1,31 @@
-<div class="business-idea-container p-shadow-6">
-  <!-- User Profile Section -->
-  <div class="profile-section p-d-flex p-ai-center p-jc-center">
+<div
+  class="business-card"
+  [ngStyle]="{
+    'background-color': businessIdea.colorTheme.background,
+    'border-color': businessIdea.colorTheme.border,
+    color: businessIdea.colorTheme.text
+  }"
+>
+  <!-- Top-Right Icon (Optional) -->
+  <div class="corner-icon">💡</div>
+
+  <!-- Left Section: Profile Image -->
+  <div class="profile-section">
     <img [src]="profileImage" alt="Profile Image" class="profile-image" />
-    <div class="profile-info">
+  </div>
+
+  <!-- Right Section: Business Info -->
+  <div class="info-section">
+    <div class="header">
       <h2 class="username">{{ username }}</h2>
       <p class="followers">{{ followers | number }} Followers</p>
     </div>
-  </div>
 
-  <!-- Business Idea Section -->
-  <div class="idea-section">
     <h1 class="idea-title">{{ businessIdea.catchyName }}</h1>
-    <p class="idea-description">{{ businessIdea.whatItIs }}</p>
-    <p class="idea-tagline">{{ businessIdea.tagline }}</p>
+    <p class="idea-description">{{ businessIdea.whatWeDo }}</p>
+    <p class="idea-tagline">“{{ businessIdea.tagline }}”</p>
   </div>
 
-  <!-- Tweetable Hook and Share Button -->
-  <div class="hook-section">
-    <p class="tweetable-hook">"{{ businessIdea.tweetableHook }}"</p>
-  </div>
+  <!-- Bottom Left "Made By" Note -->
+  <div class="made-by">Made by AI 🤖</div>
 </div>

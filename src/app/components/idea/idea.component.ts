@@ -1,12 +1,13 @@
+// idea.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-idea',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './idea.component.html',
-  styleUrl: './idea.component.css',
+  styleUrls: ['./idea.component.css'],
 })
 export class IdeaComponent {
   @Input() profileImage!: string;
@@ -15,13 +16,19 @@ export class IdeaComponent {
   @Input() tweets!: string[];
   @Input() businessIdea!: {
     catchyName: string;
-    whatItIs: string;
+    whatWeDo: string;
     tagline: string;
-    tweetableHook: string;
+    colorTheme: {
+      background: string;
+      border: string;
+      text: string;
+    };
   };
 
   shareOnTwitter() {
-    const tweetText = encodeURIComponent(this.businessIdea.tweetableHook);
+    const tweetText = encodeURIComponent(
+      `${this.businessIdea.catchyName} - ${this.businessIdea.tagline}`
+    );
     window.open(`https://twitter.com/intent/tweet?text=${tweetText}`, '_blank');
   }
 }

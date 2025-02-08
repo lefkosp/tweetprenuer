@@ -4,12 +4,17 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { providePrimeNG } from 'primeng/config';
+
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 if (environment.production) {
   enableProdMode();
 }
 
 bootstrapApplication(AppComponent, {
-  providers: [provideHttpClient(), provideAnimations(), providePrimeNG()],
+  providers: [
+    provideHttpClient(),
+    provideAnimations(),
+    provideAnimationsAsync(),
+  ],
 }).catch((err) => console.error(err));
