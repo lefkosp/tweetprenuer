@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../environments/environment';
 
 import html2canvas from 'html2canvas';
 import { LoaderComponent } from './components/loader/loader.component';
@@ -77,6 +78,7 @@ export class AppComponent {
   public route: string = 'x';
 
   constructor(private fb: FormBuilder) {
+    console.log(environment);
     this.xForm = this.fb.group({
       xUsername: [''],
     });
