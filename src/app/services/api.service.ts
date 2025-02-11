@@ -13,6 +13,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   public verifyUsername(username: string): Observable<ApiResponse> {
+    console.log(`${this.BASE_URL}/verify-username`);
     return this.http
       .post<ApiResponse>(`${this.BASE_URL}/verify-username`, {
         username,
