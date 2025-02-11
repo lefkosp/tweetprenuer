@@ -7,8 +7,8 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly API_TIMEOUT = 30000; // 30 seconds
-  private BASE_URL = environment.apiBaseUrl; // Cloudflare-injected env variable
+  private readonly API_TIMEOUT = 30000;
+  private BASE_URL = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 

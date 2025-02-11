@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://tweetprenuer-server.onrender.com',
+  apiBaseUrl: (window as any)['env']?.['API_BASE_URL'],
 };
