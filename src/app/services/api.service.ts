@@ -8,13 +8,12 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly API_TIMEOUT = 30000;
-  private BASE_URL = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
   public verifyUsername(username: string): Observable<ApiResponse> {
     return this.http
-      .post<ApiResponse>(`${this.BASE_URL}/api/verify-username`, {
+      .post<ApiResponse>(`/api/verify-username`, {
         username,
       })
       .pipe(timeout(this.API_TIMEOUT), retry(2), catchError(this.handleError));
