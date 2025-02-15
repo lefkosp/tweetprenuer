@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'api.tweetprenuer.net',
+  apiBaseUrl: 'https://api.tweetprenuer.net',
 };
