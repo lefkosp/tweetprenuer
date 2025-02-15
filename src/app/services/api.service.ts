@@ -13,7 +13,7 @@ export class ApiService {
 
   public verifyUsername(username: string): Observable<ApiResponse> {
     return this.http
-      .post<ApiResponse>(`/api/verify-username`, {
+      .post<ApiResponse>(`${environment.apiBaseUrl}/api/verify-username`, {
         username,
       })
       .pipe(timeout(this.API_TIMEOUT), retry(2), catchError(this.handleError));
