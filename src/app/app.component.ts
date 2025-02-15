@@ -78,7 +78,6 @@ export class AppComponent {
   public route: string = 'x';
 
   constructor(private fb: FormBuilder) {
-    console.log(environment);
     this.xForm = this.fb.group({
       xUsername: [''],
     });
@@ -140,7 +139,7 @@ export class AppComponent {
   }
 
   async downloadScreenshot() {
-    const ideaElement = document.querySelector('.business-idea-container');
+    const ideaElement = document.querySelector('.business-card');
     if (ideaElement) {
       const canvas = await html2canvas(ideaElement as HTMLElement, {
         scale: 2,

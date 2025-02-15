@@ -32,9 +32,19 @@ export class IdeaService {
     let catchyName = '';
     if (catchyBlock) {
       const match = catchyBlock.match(/\*\*(.*?)\*\*/);
-      catchyName = match
-        ? match[1].trim()
-        : catchyBlock.replace('📌', '').trim();
+      if (match) {
+        catchyName = match[1].trim();
+      } else {
+        const lines = catchyBlock.split('\n');
+        if (lines.length > 1) {
+          catchyName = lines.slice(1).join(' ').trim();
+        } else {
+          catchyName = catchyBlock
+            .replace('📌', '')
+            .replace(/Company Name:/i, '')
+            .trim();
+        }
+      }
     }
 
     // --- "What We Do" Section ---

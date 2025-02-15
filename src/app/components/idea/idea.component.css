@@ -16,18 +16,12 @@
   transition: transform 0.25s ease-out;
   transform-style: preserve-3d;
   will-change: transform;
+  
 }
 
 /* Hover Effect - Subtle Shine */
 .business-card:hover {
   transform: scale(1.03);
-}
-
-.business-idea-container {
-}
-
-.business-idea-container:hover {
-  transition: none; /* Remove transition on hover for real-time effect */
 }
 
 /* Profile Section (Left Side) */
@@ -106,4 +100,7 @@
   font-size: 12px;
   opacity: 0.7;
   font-style: italic;
+  Background: #A0E8E0  ;
+  Border: #007B5F"
 }
+
