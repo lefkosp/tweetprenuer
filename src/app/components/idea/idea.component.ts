@@ -1,6 +1,12 @@
 // idea.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-idea',
@@ -24,6 +30,27 @@ export class IdeaComponent {
       text: string;
     };
   };
+  @ViewChild('card', { static: true }) card!: ElementRef;
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    const card = this.card.nativeElement;
+    const { left, top, width, height } = card.getBoundingClientRect();
+
+    // Calculate tilt rotation based on cursor position
+    const x = (event.clientX - left - width / 2) / width;
+    const y = (event.clientY - top - height / 2) / height;
+
+    const rotateX = y * 10; // Adjust tilt intensity
+    const rotateY = x * 10;
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  }
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    this.card.nativeElement.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+  }
 
   shareOnTwitter() {
     const tweetText = encodeURIComponent(

@@ -12,13 +12,22 @@
   border: 3px solid;
   font-family: "Poppins", sans-serif;
   position: relative; /* For absolute positioning of corner elements */
-  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+  /* transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out; */
+  transition: transform 0.25s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 /* Hover Effect - Subtle Shine */
 .business-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.194);
+  transform: scale(1.03);
+}
+
+.business-idea-container {
+}
+
+.business-idea-container:hover {
+  transition: none; /* Remove transition on hover for real-time effect */
 }
 
 /* Profile Section (Left Side) */
