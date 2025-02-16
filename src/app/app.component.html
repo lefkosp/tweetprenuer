@@ -1,47 +1,49 @@
-<div class="test-container">
-  <div class="main-container">
-    @if (isSubmitting){
-    <app-loader />
-    } @else { @if (!parsedResponse) {
-    <div class="x-form-container" [formGroup]="xForm">
-      <div class="header">
-        <!-- <div class="logo">
+<div class="container">
+  <app-nav class="nav" />
+  <div class="wrapper">
+    <div class="main-container">
+      @if (isSubmitting){
+      <app-loader />
+      } @else { @if (!parsedResponse) {
+      <div class="x-form-container" [formGroup]="xForm">
+        <div class="header">
+          <!-- <div class="logo">
           <mat-icon class="x-icon">trending_up</mat-icon>
         </div> -->
-        <h1>who are you?</h1>
-        <p class="subtitle">
-          drop your 𝕏 handle & I'll cook up a business card just for you
-        </p>
-      </div>
-
-      <div class="content">
-        <div class="input-wrapper">
-          <mat-form-field class="input-group" appearance="fill">
-            <mat-label>Username</mat-label>
-            <span matPrefix class="prefix">&#64;</span>
-            <input
-              matInput
-              id="username"
-              type="text"
-              formControlName="xUsername"
-              placeholder="elonmusk"
-            />
-            <mat-hint
-              >Enter your X (Twitter) username without the &#64;
-              symbol</mat-hint
-            >
-          </mat-form-field>
+          <h1>who are you?</h1>
+          <p class="subtitle">
+            drop your 𝕏 handle & I'll cook up a business card just for you
+          </p>
         </div>
-      </div>
 
-      <div class="actions">
-        <button mat-raised-button color="primary" (click)="submitUsername()">
-          <mat-icon>outdoor_grill</mat-icon>
-          Cook
-        </button>
-      </div>
+        <div class="content">
+          <div class="input-wrapper">
+            <mat-form-field class="input-group" appearance="fill">
+              <mat-label>Username</mat-label>
+              <span matPrefix class="prefix">&#64;</span>
+              <input
+                matInput
+                id="username"
+                type="text"
+                formControlName="xUsername"
+                placeholder="elonmusk"
+              />
+              <mat-hint
+                >Enter your X (Twitter) username without the &#64;
+                symbol</mat-hint
+              >
+            </mat-form-field>
+          </div>
+        </div>
 
-      <div class="features">
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="submitUsername()">
+            <mat-icon>outdoor_grill</mat-icon>
+            Cook
+          </button>
+        </div>
+
+        <!-- <div class="features">
         <div class="feature">
           <mat-icon>psychology</mat-icon>
           <span>AI-Powered</span>
@@ -54,29 +56,61 @@
           <mat-icon>bolt</mat-icon>
           <span>Instant</span>
         </div>
+      </div> -->
       </div>
+      } @else {
+      <app-idea
+        [profileImage]="parsedResponse.profileImage"
+        [username]="parsedResponse.username"
+        [followers]="parsedResponse.followers"
+        [businessIdea]="parsedResponse.businessIdea"
+      ></app-idea>
+      } }
     </div>
-    } @else {
-    <app-idea
-      [profileImage]="parsedResponse.profileImage"
-      [username]="parsedResponse.username"
-      [followers]="parsedResponse.followers"
-      [tweets]="parsedResponse.tweets"
-      [businessIdea]="parsedResponse.businessIdea"
-    ></app-idea>
-    } }
+    <div class="made-by">
+      made by 𝕏
+      <a class="made-by-link" href="https://www.x.com/lefycodes" target="_blank"
+        >&#64;lefycodes</a
+      >
+    </div>
+    @if (parsedResponse) {
+    <button
+      mat-raised-button
+      color="accent"
+      class="download-btn"
+      type="submit"
+      (click)="downloadScreenshot()"
+    >
+      <mat-icon>download</mat-icon>
+      Get your business card
+    </button>
+    }
   </div>
-  @if (parsedResponse) {
-  <button
-    mat-raised-button
-    color="accent"
-    class="download-btn"
-    (click)="downloadScreenshot()"
-  >
-    <mat-icon>download</mat-icon>
-    Get your business card
-  </button>
-  }
+  <div class="ideas-container">
+    <div class="ideas-scroller">
+      <ng-container *ngFor="let result of pastResults; let i = index">
+        <app-idea
+          class="idea"
+          [profileImage]="result.profileImage"
+          [username]="result.username"
+          [followers]="result.followers"
+          [businessIdea]="result.businessIdea"
+          [size]="'small'"
+        ></app-idea>
+      </ng-container>
+      <!-- Duplicate the content for seamless looping -->
+      <ng-container *ngFor="let result of pastResults; let i = index">
+        <app-idea
+          class="idea"
+          [profileImage]="result.profileImage"
+          [username]="result.username"
+          [followers]="result.followers"
+          [businessIdea]="result.businessIdea"
+          [size]="'small'"
+        ></app-idea>
+      </ng-container>
+    </div>
+  </div>
 </div>
 
 <!-- 

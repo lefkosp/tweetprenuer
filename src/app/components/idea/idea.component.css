@@ -1,6 +1,4 @@
-/* Business Card Container */
 .business-card {
-  display: flex;
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
@@ -11,25 +9,21 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.12);
   border: 3px solid;
   font-family: "Poppins", sans-serif;
-  position: relative; /* For absolute positioning of corner elements */
-  /* transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out; */
+  position: relative;
   transition: transform 0.25s ease-out;
   transform-style: preserve-3d;
   will-change: transform;
-  
 }
 
-/* Hover Effect - Subtle Shine */
 .business-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
-/* Profile Section (Left Side) */
 .profile-section {
   display: flex;
   align-items: center;
-  justify-content: center;
   padding-right: 1rem;
+  gap: 1rem;
 }
 
 .profile-image {
@@ -39,16 +33,15 @@
   border: 3px solid #ffffff;
 }
 
-/* Info Section (Right Side) */
 .info-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  margin-bottom: 0.25rem;
 }
 
-/* Username & Followers */
 .username {
   font-size: 1.4rem;
   font-weight: 600;
@@ -61,22 +54,21 @@
   margin-bottom: 0.5rem;
 }
 
-/* Business Idea Title */
 .idea-title {
   font-size: 1.6rem;
   font-weight: bold;
   margin: 0.5rem 0;
   text-transform: uppercase;
+  white-space: wrap;
 }
 
-/* Business Idea Description */
 .idea-description {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
   line-height: 1.4;
+  white-space: normal !important;
 }
 
-/* Tagline (Italic & Subtle) */
 .idea-tagline {
   font-size: 0.95rem;
   font-style: italic;
@@ -84,7 +76,6 @@
   margin-top: 0.5rem;
 }
 
-/* Top-Right Icon */
 .corner-icon {
   position: absolute;
   top: 10px;
@@ -95,12 +86,9 @@
 
 .made-by {
   position: absolute;
-  bottom: 10px;
-  right: 15px;
+  bottom: 8px;
+  right: 13px;
   font-size: 12px;
   opacity: 0.7;
   font-style: italic;
-  Background: #A0E8E0  ;
-  Border: #007B5F"
 }
-

@@ -14,7 +14,6 @@ export interface ParsedResponse {
   username: string;
   profileImage: string;
   followers: number;
-  tweets: string[];
   businessIdea: BusinessIdea;
 }
 
@@ -24,7 +23,6 @@ export interface ApiResponse {
     profile_image_url_https: string;
     followers_count: number;
   };
-  tweets: string[];
   businessIdea: string;
 }
 

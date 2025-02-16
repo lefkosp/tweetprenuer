@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './services/api.service';
 import { IdeaService } from './services/idea.service';
-import { BusinessIdea, ParsedResponse } from './models/idea.model';
+import { ApiResponse, BusinessIdea, ParsedResponse } from './models/idea.model';
 import { IdeaComponent } from './components/idea/idea.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { environment } from '../environments/environment';
 
 import html2canvas from 'html2canvas';
 import { LoaderComponent } from './components/loader/loader.component';
+import { NavComponent } from './components/nav/nav.component';
 
 type valuationOptions = 'x' | 'questions';
 
@@ -33,6 +34,7 @@ type valuationOptions = 'x' | 'questions';
     MatIconModule,
     IdeaComponent,
     LoaderComponent,
+    NavComponent,
   ],
 })
 export class AppComponent {
@@ -42,6 +44,8 @@ export class AppComponent {
 
   public profile: any;
   public posts: any;
+
+  public pastResults: ParsedResponse[] = [];
 
   public parsedResponse: ParsedResponse | undefined;
 
@@ -81,6 +85,20 @@ export class AppComponent {
     this.xForm = this.fb.group({
       xUsername: [''],
     });
+
+    this.apiService.ping().subscribe((res) => console.log(res));
+
+    this.apiService.getPastResults().subscribe((res) => {
+      this.pastResults = this.processPastResults(res);
+    });
+  }
+
+  public processPastResults(res: ApiResponse[]): ParsedResponse[] {
+    return res.map((r) => {
+      return {
+        ...this.ideaService.parseApiResponse(r),
+      };
+    });
   }
 
   public submitUsername() {
@@ -90,18 +108,13 @@ export class AppComponent {
     this.apiService.verifyUsername(username).subscribe({
       next: (res) => {
         this.isSubmitting = false;
-        console.log(res);
         this.parsedResponse = this.ideaService.parseApiResponse(res);
-        console.log(this.parsedResponse);
       },
       error: (err) => {
         console.error(err);
         this.isSubmitting = false;
       },
     });
-    // this.xapiService.getProfileAndTweets('lefycodes').subscribe((value) => {
-    //   this.isSubmitting = false;
-    // });
   }
 
   public setCurrentPanel(panel: number | undefined) {

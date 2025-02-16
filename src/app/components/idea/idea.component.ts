@@ -16,10 +16,10 @@ import {
   styleUrls: ['./idea.component.css'],
 })
 export class IdeaComponent {
+  @Input() size: 'small' | 'default' = 'default';
   @Input() profileImage!: string;
   @Input() username!: string;
   @Input() followers!: number;
-  @Input() tweets!: string[];
   @Input() businessIdea!: {
     catchyName: string;
     whatWeDo: string;
@@ -34,6 +34,7 @@ export class IdeaComponent {
 
   @HostListener('mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
+    if (this.size === 'small') return;
     const card = this.card.nativeElement;
     const { left, top, width, height } = card.getBoundingClientRect();
 

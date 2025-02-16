@@ -4,28 +4,83 @@
   [ngStyle]="{
     'background-color': businessIdea.colorTheme.background,
     'border-color': businessIdea.colorTheme.border,
-    color: businessIdea.colorTheme.text
+    color: businessIdea.colorTheme.text,
+    'max-width': size === 'default' ? '700px' : '500px',
+    'font-size': size === 'small' ? '0.85rem' : '1rem',
+    padding: size === 'small' ? '0.5rem' : '',
+    width: size === 'small' ? '500px' : '',
+    height: size === 'small' ? '100%' : '',
   }"
 >
-  <!-- Top-Right Icon (Optional) -->
+  <!-- Top-Right Icon -->
   <div class="corner-icon">💡</div>
 
-  <!-- Left Section: Profile Image -->
+  <!-- Profile Section -->
   <div class="profile-section">
-    <img [src]="profileImage" alt="Profile Image" class="profile-image" />
-  </div>
-
-  <!-- Right Section: Business Info -->
-  <div class="info-section">
+    <img
+      [src]="profileImage"
+      alt="Profile Image"
+      class="profile-image"
+      [ngStyle]="{
+        width: size === 'small' ? '50px' : '',
+        height: size === 'small' ? '50px' : ''
+      }"
+    />
     <div class="header">
-      <h2 class="username">{{ username }}</h2>
-      <p class="followers">{{ followers | number }} Followers</p>
+      <h2
+        class="username"
+        [ngStyle]="{
+          'font-size': size === 'small' ? '1rem' : ''
+        }"
+      >
+        &#64;{{ username }}
+      </h2>
+      <p
+        class="followers"
+        [ngStyle]="{
+          'font-size': size === 'small' ? '0.8rem' : ''
+        }"
+      >
+        {{ followers | number }} Followers
+      </p>
     </div>
-
-    <h1 class="idea-title">{{ businessIdea.catchyName }}</h1>
-    <p class="idea-description">{{ businessIdea.whatWeDo }}</p>
-    <p class="idea-tagline">“{{ businessIdea.tagline }}”</p>
   </div>
 
-  <div class="made-by">tweetpreneuer.net 🤖</div>
+  <!-- Business Info Section -->
+  <div class="info-section">
+    <h1
+      class="idea-title"
+      [ngStyle]="{
+        'font-size': size === 'small' ? '1.2rem' : ''
+      }"
+    >
+      {{ businessIdea.catchyName }}
+    </h1>
+    <p
+      class="idea-description"
+      [ngStyle]="{
+        'font-size': size === 'small' ? '0.6rem' : ''
+      }"
+    >
+      {{ businessIdea.whatWeDo }}
+    </p>
+    <p
+      class="idea-tagline"
+      [ngStyle]="{
+        'font-size': size === 'small' ? '0.4rem' : ''
+      }"
+    >
+      “{{ businessIdea.tagline }}”
+    </p>
+  </div>
+
+  <!-- Bottom-Right Branding -->
+  <div
+    class="made-by"
+    [ngStyle]="{
+      'font-size': size === 'small' ? '8px' : ''
+    }"
+  >
+    tweetpreneuer.net 🤖
+  </div>
 </div>

@@ -19,6 +19,16 @@ export class ApiService {
       .pipe(timeout(this.API_TIMEOUT), retry(2), catchError(this.handleError));
   }
 
+  public getPastResults(): Observable<ApiResponse[]> {
+    return this.http.get<ApiResponse[]>(
+      `${environment.apiBaseUrl}/api/past-results`
+    );
+  }
+
+  public ping() {
+    return this.http.get(`${environment.apiBaseUrl}/api/ping`);
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An error occurred';
 
