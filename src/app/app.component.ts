@@ -15,7 +15,6 @@ import { environment } from '../environments/environment';
 
 import html2canvas from 'html2canvas';
 import { LoaderComponent } from './components/loader/loader.component';
-import { NavComponent } from './components/nav/nav.component';
 
 type valuationOptions = 'x' | 'questions';
 
