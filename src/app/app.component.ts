@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../environments/environment';
 
 import html2canvas from 'html2canvas';
@@ -33,12 +34,14 @@ type valuationOptions = 'x' | 'questions';
     MatIconModule,
     IdeaComponent,
     LoaderComponent,
+    MatSnackBarModule,
   ],
 })
 export class AppComponent {
   private formBuilder = inject(FormBuilder);
   private apiService = inject(ApiService);
   private ideaService = inject(IdeaService);
+  private snackBar = inject(MatSnackBar);
 
   public profile: any;
   public posts: any;
@@ -111,7 +114,11 @@ export class AppComponent {
         this.parsedResponse = this.ideaService.parseApiResponse(res);
       },
       error: (err) => {
-        console.error(err);
+        console.log(err);
+        this.snackBar.open(`Error verifying username`, 'error', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
         this.isSubmitting = false;
       },
     });
