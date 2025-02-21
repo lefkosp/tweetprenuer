@@ -72,27 +72,25 @@
         >&#64;lefycodes</a
       >
     </div>
-    @if (parsedResponse) {
+    @if (!parsedResponse) {
     <button
       mat-raised-button
       color="accent"
       class="download-btn"
-      type="submit"
-      (click)="downloadScreenshot()"
-    >
-      <mat-icon>download</mat-icon>
-      Get your business card
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      class="download-btn"
-      type="submit"
       (click)="shareOnX()"
     >
       <mat-icon>share</mat-icon>
       Share on 𝕏
     </button>
+    <button
+      mat-button
+      class="download-btn-secondary"
+      (click)="downloadScreenshot()"
+    >
+      <mat-icon>download</mat-icon>
+      Download business card
+    </button>
+
     }
   </div>
   <div class="ideas-container">

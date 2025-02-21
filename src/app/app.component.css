@@ -294,10 +294,18 @@ button[mat-raised-button]:hover {
   display: none;
 }
 
+.download-btn-secondary {
+  margin-top: 1rem;
+  border: 2px solid #ececec;
+  color: #ececec !important;
+  padding: 1.25rem 1rem;
+}
+
 .download-btn {
   margin-top: 1rem;
   background-color: #9c27b0 !important;
   color: white !important;
+  padding: 1rem;
 }
 
 .download-btn mat-icon {
