@@ -34,7 +34,6 @@ type valuationOptions = 'x' | 'questions';
     MatIconModule,
     IdeaComponent,
     LoaderComponent,
-    NavComponent,
   ],
 })
 export class AppComponent {
@@ -78,8 +77,10 @@ export class AppComponent {
 
   public xForm: FormGroup;
 
-  businessIdea: BusinessIdea | null = null;
+  public businessIdea: BusinessIdea | null = null;
   public route: string = 'x';
+
+  public tweetUrl = 'https://x.com/lefycodes/status/1886391492224426495';
 
   constructor(private fb: FormBuilder) {
     this.xForm = this.fb.group({
@@ -151,9 +152,13 @@ export class AppComponent {
     return Object.keys;
   }
 
-  async downloadScreenshot() {
+  async generateScreenshotCanvas(): Promise<HTMLCanvasElement | null> {
     const ideaElement = document.querySelector('.business-card');
-    if (ideaElement) {
+    if (!ideaElement) {
+      console.error('Business card element not found');
+      return null;
+    }
+    try {
       const canvas = await html2canvas(ideaElement as HTMLElement, {
         scale: 2,
         useCORS: true,
@@ -161,12 +166,55 @@ export class AppComponent {
         backgroundColor: '#242424',
         logging: false,
       });
+      return canvas;
+    } catch (error) {
+      console.error('Error generating screenshot:', error);
+      return null;
+    }
+  }
+
+  async downloadScreenshot(): Promise<void> {
+    const canvas = await this.generateScreenshotCanvas();
+    if (canvas) {
       const link = document.createElement('a');
       link.download = `business-idea-${
         this.parsedResponse?.username || 'screenshot'
       }.png`;
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
+    }
+  }
+
+  async shareOnX(): Promise<void> {
+    const canvas = await this.generateScreenshotCanvas();
+    if (canvas) {
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          console.error('Failed to convert canvas to blob.');
+          return;
+        }
+        try {
+          const clipboardItem = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([clipboardItem]);
+
+          // Define the tweet text with a message and the tweet URL to quote
+          const tweetText = encodeURIComponent(
+            `Check this out: ${this.tweetUrl}`
+          );
+          // Open X tweet composition in a new tab
+          window.open(
+            `https://twitter.com/intent/tweet?text=${tweetText}`,
+            '_blank'
+          );
+
+          alert(
+            'Screenshot copied to clipboard! Paste it into the opened tweet composition on X.'
+          );
+        } catch (err) {
+          console.error('Failed to copy image to clipboard:', err);
+          alert('Copying failed. Please try manually.');
+        }
+      }, 'image/png');
     }
   }
 }

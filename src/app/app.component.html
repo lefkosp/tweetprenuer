@@ -1,5 +1,4 @@
 <div class="container">
-  <app-nav class="nav" />
   <div class="wrapper">
     <div class="main-container">
       @if (isSubmitting){
@@ -83,6 +82,16 @@
     >
       <mat-icon>download</mat-icon>
       Get your business card
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      class="download-btn"
+      type="submit"
+      (click)="shareOnX()"
+    >
+      <mat-icon>share</mat-icon>
+      Share on 𝕏
     </button>
     }
   </div>
