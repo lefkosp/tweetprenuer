@@ -26,6 +26,7 @@
                 type="text"
                 formControlName="xUsername"
                 placeholder="elonmusk"
+                (keydown.enter)="submitUsername()"
               />
               <mat-hint
                 >Enter your X (Twitter) username without the &#64;
@@ -36,7 +37,12 @@
         </div>
 
         <div class="actions">
-          <button mat-raised-button color="primary" (click)="submitUsername()">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            (click)="submitUsername()"
+          >
             <mat-icon>outdoor_grill</mat-icon>
             Cook
           </button>
@@ -72,7 +78,7 @@
         >&#64;lefycodes</a
       >
     </div>
-    @if (!parsedResponse) {
+    @if (parsedResponse) {
     <button
       mat-raised-button
       color="accent"
