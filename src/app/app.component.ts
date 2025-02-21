@@ -82,7 +82,7 @@ export class AppComponent {
   public businessIdea: BusinessIdea | null = null;
   public route: string = 'x';
 
-  public tweetUrl = 'https://x.com/lefycodes/status/1886391492224426495';
+  public tweetUrl = 'https://x.com/lefycodes/status/1893025862812844040';
 
   constructor(private fb: FormBuilder) {
     this.xForm = this.fb.group({
