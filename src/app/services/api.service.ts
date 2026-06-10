@@ -19,6 +19,24 @@ export class ApiService {
       .pipe(timeout(this.API_TIMEOUT), retry(2), catchError(this.handleError));
   }
 
+  public getMoreTweets(username: string): Observable<string[]> {
+    return this.http
+      .get<string[]>(`${environment.apiBaseUrl}/api/more-tweets/${username}`)
+      .pipe(timeout(this.API_TIMEOUT), catchError(this.handleError));
+  }
+
+  public regenerateIdea(
+    username: string,
+    tweets: string[]
+  ): Observable<ApiResponse> {
+    return this.http
+      .post<ApiResponse>(`${environment.apiBaseUrl}/api/regenerate-idea`, {
+        username,
+        tweets,
+      })
+      .pipe(timeout(this.API_TIMEOUT), catchError(this.handleError));
+  }
+
   public getPastResults(): Observable<ApiResponse[]> {
     return this.http.get<ApiResponse[]>(
       `${environment.apiBaseUrl}/api/past-results`

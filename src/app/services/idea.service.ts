@@ -10,7 +10,7 @@ import {
 })
 export class IdeaService {
   public parseApiResponse(apiResponse: ApiResponse): ParsedResponse {
-    const { profile, businessIdea } = apiResponse;
+    const { profile, businessIdea, tweets } = apiResponse;
 
     // Split the entire businessIdea string into sections based on double newlines
     const ideaSections = businessIdea
@@ -81,6 +81,7 @@ export class IdeaService {
 
     return {
       username: profile.screen_name,
+      name: profile.name,
       profileImage: profile.profile_image_url_https.replace('_normal', ''),
       followers: profile.followers_count,
       businessIdea: {
@@ -93,6 +94,7 @@ export class IdeaService {
           text: textColor,
         },
       },
+      tweets: tweets?.map((t, i) => ({ id: `${i + 1}`, content: t })),
     };
   }
 }

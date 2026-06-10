@@ -19,6 +19,7 @@ export class IdeaComponent {
   @Input() size: 'small' | 'default' = 'default';
   @Input() profileImage!: string;
   @Input() username!: string;
+  @Input() name!: string;
   @Input() followers!: number;
   @Input() businessIdea!: {
     catchyName: string;

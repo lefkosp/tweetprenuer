@@ -6,9 +6,6 @@
       } @else { @if (!parsedResponse) {
       <div class="x-form-container" [formGroup]="xForm">
         <div class="header">
-          <!-- <div class="logo">
-          <mat-icon class="x-icon">trending_up</mat-icon>
-        </div> -->
           <h1>who are you?</h1>
           <p class="subtitle">
             drop your 𝕏 handle & I'll cook up a business card just for you
@@ -47,30 +44,41 @@
             Cook
           </button>
         </div>
-
-        <!-- <div class="features">
-        <div class="feature">
-          <mat-icon>psychology</mat-icon>
-          <span>AI-Powered</span>
-        </div>
-        <div class="feature">
-          <mat-icon>person_outline</mat-icon>
-          <span>Personalized</span>
-        </div>
-        <div class="feature">
-          <mat-icon>bolt</mat-icon>
-          <span>Instant</span>
-        </div>
-      </div> -->
       </div>
       } @else {
-      <app-idea
-        [profileImage]="parsedResponse.profileImage"
-        [username]="parsedResponse.username"
-        [followers]="parsedResponse.followers"
-        [businessIdea]="parsedResponse.businessIdea"
-      ></app-idea>
-      } }
+      <div class="content-wrapper">
+        <div
+          class="idea-container"
+          [@ideaSlide]="tweetsVisible ? 'up' : 'center'"
+        >
+          <app-idea
+            [profileImage]="parsedResponse.profileImage"
+            [username]="parsedResponse.username"
+            [name]="parsedResponse.name"
+            [followers]="parsedResponse.followers"
+            [businessIdea]="parsedResponse.businessIdea"
+          ></app-idea>
+        </div>
+
+        @if (parsedResponse.tweets && parsedResponse.tweets.length > 0) {
+        <div
+          class="tweets-container"
+          [@tweetsSlide]="tweetsVisible ? 'center' : 'down'"
+        >
+          <app-tweet-selector
+            [tweets]="parsedResponse.tweets"
+            (onMoreTweets)="getMoreTweets()"
+            (onConfirmSelection)="confirmTweetSelection($event)"
+          ></app-tweet-selector>
+        </div>
+        }
+      </div>
+
+      @if (parsedResponse.tweets && parsedResponse.tweets.length > 0) {
+      <button mat-button (click)="toggleTweets()">
+        {{ tweetsVisible ? "Cancel" : "Customize Tweets" }}
+      </button>
+      } } }
     </div>
     @if (parsedResponse) {
     <button
@@ -119,217 +127,3 @@
     </div>
   </div>
 </div>
-
-<!-- 
- @if (isSubmitting){
-    <p-progress-spinner ariaLabel="loading" />
-    } @else { @if (!parsedResponse) { @if (valuationOption === 'questions') {
-    <form class="form-container" [formGroup]="form">
-      <p-stepper [value]="currentPanel" (valueChange)="setCurrentPanel($event)">
-        <p-step-list>
-          <p-step [value]="1">Header I</p-step>
-          <p-step [value]="2">Header II</p-step>
-          <p-step [value]="3">Header III</p-step>
-          <p-step [value]="4">Header IV</p-step>
-          <p-step [value]="5">Header V</p-step>
-        </p-step-list>
-        <p-step-panels>
-          <p-step-panel [value]="1">
-            <ng-template
-              #content
-              let-activateCallback="activateCallback"
-              formGroupName="step1"
-            >
-              <div class="step">
-                <h3>Motivation and Purpose</h3>
-
-                <label>What motivates you most about starting a business</label>
-                <input pInputText fluid formControlName="motivation" />
-
-                <label
-                  >What would success look like for you in this business?</label
-                >
-                <input pInputText fluid formControlName="success" />
-              </div>
-            </ng-template>
-          </p-step-panel>
-          <p-step-panel [value]="2">
-            <ng-template
-              #content
-              let-activateCallback="activateCallback"
-              formGroupName="step2"
-            >
-              <div class="step">
-                <h3>Skills and Interests</h3>
-
-                <label>What are your top skills or areas of expertise?</label>
-                <input pInputText fluid formControlName="skills" />
-
-                <label>What are your personal interests or hobbies?</label>
-                <input pInputText fluid formControlName="interests" />
-              </div>
-            </ng-template>
-          </p-step-panel>
-          <p-step-panel [value]="3">
-            <ng-template
-              #content
-              let-activateCallback="activateCallback"
-              formGroupName="step3"
-            >
-              <div class="step">
-                <h3>Problem-Solving and Opportunity</h3>
-
-                <label
-                  >What problem have you experienced recently that you wish
-                  someone would solve?</label
-                >
-                <input pInputText fluid formControlName="problem" />
-
-                <label>Who do you want to serve with your business?</label>
-                <input pInputText fluid formControlName="audience" />
-              </div>
-            </ng-template>
-          </p-step-panel>
-          <p-step-panel [value]="4">
-            <ng-template
-              #content
-              let-activateCallback="activateCallback"
-              formGroupName="step4"
-            >
-              <div class="step">
-                <h3>Business Preferences and Constraints</h3>
-
-                <label
-                  >Do you have a preference for a particular type of
-                  business?</label
-                >
-                <input
-                  pInputText
-                  fluid
-                  formControlName="businessTypePreference"
-                />
-
-                <label
-                  >How much initial time and financial investment are you
-                  willing to make?
-                </label>
-                <div class="inputs-container">
-                  <p-inputgroup>
-                    <p-inputgroup-addon>$</p-inputgroup-addon>
-                    <p-inputnumber
-                      formControlName="money"
-                      placeholder="financial commitment"
-                    />
-                    <p-inputgroup-addon>.00</p-inputgroup-addon>
-                  </p-inputgroup>
-
-                  <p-inputgroup>
-                    <p-inputnumber
-                      formControlName="time"
-                      placeholder="time commitment"
-                    />
-                    <p-inputgroup-addon>hrs/week</p-inputgroup-addon>
-                  </p-inputgroup>
-                </div>
-
-                <label>What kind of work environment do you prefer? </label>
-                <input pInputText fluid formControlName="workEnv" />
-              </div>
-            </ng-template>
-          </p-step-panel>
-          <p-step-panel [value]="5">
-            <ng-template
-              #content
-              let-activateCallback="activateCallback"
-              formGroupName="step5"
-            >
-              <div class="step">
-                <h3>Experience and Background</h3>
-
-                <label>Do you have any prior business experience?</label>
-                <input pInputText fluid formControlName="experience" />
-
-                <div class="step-actions"></div>
-              </div>
-            </ng-template>
-          </p-step-panel>
-        </p-step-panels>
-
-        <div class="step-actions" [ngClass]="{ end: currentPanel === 1 }">
-          @if (currentPanel !== 1){
-          <p-button
-            label="Back"
-            severity="secondary"
-            icon="pi pi-arrow-left"
-            (onClick)="panelChange(-1)"
-          />
-          } @if (route === 'questions') {
-          <a class="switcher" [routerLink]="'/x'" (click)="routeChange('x')"
-            >switch to X profile</a
-          >
-          } @if (currentPanel !== 5) {
-          <p-button
-            (onClick)="panelChange(+1)"
-            label="Next"
-            icon="pi pi-arrow-right"
-            iconPos="right"
-          />
-          } @else {
-          <p-button
-            (onClick)="submit()"
-            label="Submit"
-            icon="pi pi-check"
-            iconPos="left"
-          />
-          }
-        </div>
-      </p-stepper>
-    </form>
-    } @else if (valuationOption === 'x'){
-    <div class="x-form-container" [formGroup]="xForm">
-      <div class="header">
-        <h1>Welcome!</h1>
-        <span>enter your 𝕏 username for a personalized business idea</span>
-      </div>
-
-      <div class="content">
-        <p-inputgroup class="input-group">
-          <p-inputgroup-addon>&#64;</p-inputgroup-addon>
-          <input
-            id="username"
-            pInputText
-            type="text"
-            placeholder="username"
-            formControlName="xUsername"
-          />
-        </p-inputgroup>
-      </div>
-
-      <div class="actions">
-        <p-button
-          (onClick)="submitUsername()"
-          label="Submit"
-          icon="pi pi-check"
-          iconPos="left"
-        />
-      </div>
-      @if (route === 'x') {
-      <a
-        class="switcher"
-        [routerLink]="'/questions'"
-        (click)="routeChange('questions')"
-        >switch to questionaire</a
-      >
-      }
-    </div>
-    } }@else if (parsedResponse) {
-    <app-idea
-      [profileImage]="parsedResponse.profileImage"
-      [username]="parsedResponse.username"
-      [followers]="parsedResponse.followers"
-      [tweets]="parsedResponse.tweets"
-      [businessIdea]="parsedResponse.businessIdea"
-    ></app-idea>
-
-    } }
--->

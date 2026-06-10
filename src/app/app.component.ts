@@ -1,10 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './services/api.service';
 import { IdeaService } from './services/idea.service';
-import { ApiResponse, BusinessIdea, ParsedResponse } from './models/idea.model';
+import { ApiResponse, ParsedResponse } from './models/idea.model';
 import { IdeaComponent } from './components/idea/idea.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,12 +11,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../environments/environment';
 
 import html2canvas from 'html2canvas';
 import { LoaderComponent } from './components/loader/loader.component';
-
-type valuationOptions = 'x' | 'questions';
+import { TweetSelectorComponent } from './components/tweet-selector/tweet-selector.component';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +40,47 @@ type valuationOptions = 'x' | 'questions';
     IdeaComponent,
     LoaderComponent,
     MatSnackBarModule,
+    TweetSelectorComponent,
   ],
+  animations: [
+    trigger('ideaSlide', [
+      state(
+        'center',
+        style({
+          transform: 'translateY(0)',
+          opacity: 1,
+        })
+      ),
+      state(
+        'up',
+        style({
+          transform: 'translateY(-150%)',
+          opacity: 0,
+        })
+      ),
+      transition('center <=> up', animate('300ms ease-in-out')),
+    ]),
+    trigger('tweetsSlide', [
+      state(
+        'down',
+        style({
+          transform: 'translateY(100%)',
+          opacity: 0,
+          visibility: 'hidden',
+        })
+      ),
+      state(
+        'center',
+        style({
+          transform: 'translateY(0)',
+          opacity: 1,
+          visibility: 'visible',
+        })
+      ),
+      transition('down <=> center', animate('300ms ease-in-out')),
+    ]),
+  ],
+  providers: [provideAnimations()],
 })
 export class AppComponent {
   private formBuilder = inject(FormBuilder);
@@ -43,53 +88,21 @@ export class AppComponent {
   private ideaService = inject(IdeaService);
   private snackBar = inject(MatSnackBar);
 
-  public profile: any;
-  public posts: any;
-
   public pastResults: ParsedResponse[] = [];
-
   public parsedResponse: ParsedResponse | undefined;
 
-  public valuationOption: valuationOptions = 'x';
   public isSubmitting: boolean = false;
-  public currentPanel: number = 1;
-  public form = this.formBuilder.group({
-    step1: this.formBuilder.group({
-      motivation: [''],
-      success: [''],
-    }),
-    step2: this.formBuilder.group({
-      skills: [''],
-      interests: [''],
-    }),
-    step3: this.formBuilder.group({
-      problem: [''],
-      audience: [''],
-    }),
-    step4: this.formBuilder.group({
-      businessTypePreference: [''],
-      time: [''],
-      money: [''],
-      workEnv: [''],
-    }),
-    step5: this.formBuilder.group({
-      experience: [''],
-    }),
+  public tweetsVisible = false;
+
+  public xForm: FormGroup = this.formBuilder.group({
+    xUsername: [''],
   });
-
-  public xForm: FormGroup;
-
-  public businessIdea: BusinessIdea | null = null;
-  public route: string = 'x';
 
   public tweetUrl = 'https://x.com/lefycodes/status/1893025862812844040';
 
-  constructor(private fb: FormBuilder) {
-    this.xForm = this.fb.group({
-      xUsername: [''],
-    });
-
-    this.apiService.ping().subscribe((res) => console.log(res));
+  constructor() {
+    // Warm up the backend (free-tier hosting cold starts) and load the carousel.
+    this.apiService.ping().subscribe();
 
     this.apiService.getPastResults().subscribe((res) => {
       this.pastResults = this.processPastResults(res);
@@ -105,7 +118,10 @@ export class AppComponent {
   }
 
   public submitUsername() {
-    const username = this.xForm.controls['xUsername'].value as string;
+    const username = (
+      this.xForm.controls['xUsername'].value as string
+    )?.trim();
+    if (!username) return;
 
     this.isSubmitting = true;
     this.apiService.verifyUsername(username).subscribe({
@@ -124,38 +140,78 @@ export class AppComponent {
     });
   }
 
-  public setCurrentPanel(panel: number | undefined) {
-    this.currentPanel = Number(panel);
+  public getMoreTweets() {
+    const username = this.parsedResponse?.username;
+    if (!username) return;
+
+    this.apiService.getMoreTweets(username).subscribe({
+      next: (tweets) => {
+        if (!this.parsedResponse) return;
+
+        const offset = this.parsedResponse.tweets.length;
+        const parsed = tweets.map((content, i) => ({
+          id: `${offset + i + 1}`,
+          content,
+        }));
+
+        // New array reference so the selector's setter picks up the additions.
+        this.parsedResponse.tweets = [...this.parsedResponse.tweets, ...parsed];
+      },
+      error: () => {
+        if (this.parsedResponse) {
+          // Retrigger the selector's input setter to clear its loading state.
+          this.parsedResponse.tweets = [...this.parsedResponse.tweets];
+        }
+        this.snackBar.open('Could not load more tweets', 'error', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
-  public panelChange(change: number) {
-    if (
-      (this.currentPanel === 1 && change === -1) ||
-      (this.currentPanel === 5 && change === 1)
-    )
+  public confirmTweetSelection(selectedIds: string[]) {
+    if (!this.parsedResponse) return;
+
+    const selected = this.parsedResponse.tweets
+      .filter((tweet) => selectedIds.includes(tweet.id))
+      .map((tweet) => tweet.content);
+
+    if (selected.length === 0) {
+      this.snackBar.open('Select at least one tweet', 'ok', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
       return;
+    }
 
-    this.currentPanel = this.currentPanel + change;
+    const existingTweets = this.parsedResponse.tweets;
+
+    this.tweetsVisible = false;
+    this.isSubmitting = true;
+    this.apiService
+      .regenerateIdea(this.parsedResponse.username, selected)
+      .subscribe({
+        next: (res) => {
+          // Keep the full tweet list — the response only echoes the selection.
+          this.parsedResponse = {
+            ...this.ideaService.parseApiResponse(res),
+            tweets: existingTweets,
+          };
+          this.isSubmitting = false;
+        },
+        error: () => {
+          this.snackBar.open('Could not regenerate the idea', 'error', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
+          this.isSubmitting = false;
+        },
+      });
   }
 
-  public submit() {
-    console.log('not working for now');
-    // this.isSubmitting = true;
-    // this.apiService.apiCall(this.form.value).subscribe((a) => {
-    //   this.businessIdea = this.ideaService.parseBusinessIdeaResponse(
-    //     a.choices[0].message.content
-    //   );
-    //   this.isSubmitting = false;
-    // });
-  }
-
-  public routeChange(value: valuationOptions) {
-    this.route = value;
-    this.valuationOption = value;
-  }
-
-  get objectKeys() {
-    return Object.keys;
+  public toggleTweets() {
+    this.tweetsVisible = !this.tweetsVisible;
   }
 
   async generateScreenshotCanvas(): Promise<HTMLCanvasElement | null> {

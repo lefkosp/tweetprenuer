@@ -1,0 +1,28 @@
+<mat-card class="tweet-selector" appearance="outlined">
+  <h3 mat-card-title>Select Tweets</h3>
+
+  <mat-divider></mat-divider>
+
+  <div mat-card-content class="tweet-selector-content">
+    @for (tweet of tweets; track $index) {
+    <div class="tweet-selector-item">
+      <mat-checkbox
+        [value]="tweet.id"
+        [checked]="selectedTweets.includes(tweet.id)"
+        (change)="toggleTweetSelection(tweet.id)"
+      >
+        {{ tweet.content }}
+      </mat-checkbox>
+    </div>
+    } @if (isLoading) {
+    <div class="loader-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    }
+  </div>
+
+  <div mat-card-actions class="tweet-selector-actions">
+    <button mat-flat-button (click)="getMoreTweets()">Dig Deeper</button>
+    <button mat-button (click)="confirmSelection()">Confirm Selection</button>
+  </div>
+</mat-card>

@@ -27,6 +27,25 @@
       }"
     />
     <div class="header">
+      @if (name) {
+      <h2
+        class="username"
+        [ngStyle]="{
+          'font-size': size === 'small' ? '1rem' : ''
+        }"
+      >
+        {{ name }}
+      </h2>
+      <p
+        class="followers"
+        [ngStyle]="{
+          'font-size': size === 'small' ? '0.8rem' : ''
+        }"
+      >
+        &#64;{{ username }}
+      </p>
+      } @else {
+
       <h2
         class="username"
         [ngStyle]="{
@@ -43,6 +62,7 @@
       >
         {{ followers | number }} Followers
       </p>
+      }
     </div>
   </div>
 
