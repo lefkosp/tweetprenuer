@@ -1,27 +1,38 @@
-# Ideagen
+# Tweetprenuer
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+Full-stack AI product that turns an X profile into a shareable business card.
 
-## Development server
+**Live:** [tweetprenuer.net](https://tweetprenuer.net)  
+**Backend:** [tweetprenuer-server](https://github.com/lefkosp/tweetprenuer-server)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Stack
 
-## Code scaffolding
+- Angular 19 frontend (this repo)
+- Express + MongoDB API with OpenAI and SocialData integrations
+- Response caching to control API spend on repeat lookups
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Local development
+
+```bash
+npm install
+ng serve
+```
+
+Create `src/environments/environment.ts` pointing at your API:
+
+```ts
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:3000',
+};
+```
+
+The backend needs `OPENAI_API_KEY`, `SOCIALDATA_API_KEY`, and `MONGODB_URI`. See the server repo for setup.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+ng build
+```
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Production builds output to `dist/tweetprenuer` and use `environment.prod.ts` (`api.tweetprenuer.net`).
